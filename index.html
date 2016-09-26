@@ -1,0 +1,122 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIT 3D prototype</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/progress.css" />
+  </head>
+  <body>
+    <div id="webgl"></div>
+    <div id="container">
+      <div id="valueBoard">
+        <span>
+            RESIDENTIAL VALUE ($)
+            <span id="residentialValue" class="value-span">
+              0
+            </span>
+            <div id="residentialPercent" class="meter">
+              <span style="width: 0"></span>
+            </div>
+        </span>
+        <hr>
+        <span>
+            COMMERCIAL VALUE ($)
+            <span id="commercialValue" class="value-span">
+              0
+            </span>
+            <div id="commercialPercent" class="meter">
+              <span style="width: 0"></span>
+            </div>
+        </span>
+        <hr>
+        <span>
+            SOCIAL VALUE ($)
+            <span id="socialValue" class="value-span">
+              0
+            </span>
+            <div id="socialPercent" class="meter">
+              <span style="width: 0"></span>
+            </div>
+        </span>
+      </div>
+
+      <div id="blockMenuResidential">
+        <div id="selectTypeTitle">
+          <b>SELECT AND APPLY</b>
+        </div>
+
+        <div data-type="HIGH_END_RESIDENTIAL" data-color="rgb(155, 69, 33)" class="blockMenuResidentialItem">
+          <span class="square orange"></span>
+          <span class="menu-label">
+            <a>High-End Residential</a>
+          </span>
+        </div>
+
+        <div data-type="AFFORDABLE" data-color="rgb(191, 144, 0)" class="blockMenuResidentialItem">
+          <span class="square yellow"></span>
+          <span class="menu-label">
+            <a>Affordable Housing</a>
+          </span>
+        </div>
+      </div>
+
+
+      <div id="blockMenuCommercial">
+        <div id="selectTypeTitle">
+          <b>SELECT AND APPLY</b>
+        </div>
+
+        <div data-type="CONVENIENCE" data-color="rgb(65, 138, 132)" class="blockMenuCommercialItem">
+          <span class="square blue"></span>
+          <span class="menu-label">
+            <a>Local convenience</a>
+          </span>
+        </div>
+
+        <div data-type="GROCERY" data-color="rgb(155, 69, 33)" class="blockMenuCommercialItem">
+          <span class="square orange"></span>
+          <span class="menu-label">
+            <a>Local grocery</a>
+          </span>
+        </div>
+
+        <div data-type="LOCAL" data-color="rgb(191, 144, 0)" class="blockMenuCommercialItem">
+          <span class="square yellow"></span>
+          <span class="menu-label">
+            <a>Local service</a>
+          </span>
+        </div>
+
+        <div data-type="RESTAURANT" data-color="rgb(191, 158, 116)" class="blockMenuCommercialItem">
+          <span class="square skin"></span>
+          <span class="menu-label"><a>Restaurant / Bar</a></span>
+        </div>
+
+        <div data-type="TOURISM" data-color="rgb(81, 50, 49)" class="blockMenuCommercialItem">
+          <span class="square brown"></span>
+          <span class="menu-label"><a>Tourism-oriented low-quality goods</a></span>
+        </div>
+
+        <div data-type="ARTISAN" data-color="rgb(110, 27, 24)" class="blockMenuCommercialItem">
+          <span class="square red"></span>
+          <span class="menu-label"><a>Artisan and cultural goods</a></span>
+        </div>
+
+        <div data-type="COMMUNITY" data-color="rgb(105, 120, 61)" class="blockMenuCommercialItem">
+          <span class="square green"></span>
+          <span class="menu-label"><a>Community equipment</a></span>
+        </div>
+      </div>
+    </div>
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery.balloon.js"></script>
+    <script src="js/three.min.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/OrbitControls.example.js"></script>
+    <script src="js/stats.min.js"></script>
+    <script src="js/calc.js"></script>
+    <script src="js/clickEvents.js"></script>
+    <script src="js/earth.js"></script>
+  </body>
+</html>
