@@ -1,4 +1,5 @@
 var MIT = {};
+MIT.currentExercise = 0;
 // types of objects
 MIT.objectType = {
     CONVENIENCE: {
@@ -102,37 +103,61 @@ MIT.objectType = {
 }
 
 
-MIT.getResidentialValue = function() {
+MIT._getTypeCount = function() {
+    var typeCount = {};
+
+    for (var i = 0; i < sceneElements.firstFloor.length; i++) {
+        var element = sceneElements.firstFloor[i];
+        if(element && element.type) {
+            if(typeCount[element.type]) {
+                typeCount[element.type] += element.options.multiplier;
+            }
+            else {
+                typeCount[element.type] = element.options.multiplier;
+            }
+        }
+    }
+
+    return typeCount;
+}
+
+MIT._getResidentialCount = function() {
     var x = y = 0;
-    for (var i = 0; i < scene.children.length; i++) {
-        var child = scene.children[i];
-        if(child.userData && child.userData.type && child.residential) {
-            if(child.userData.type === 'HIGH_END_RESIDENTIAL') {
+
+    for (var i = 0; i < sceneElements.secondFloor.length; i++) {
+        var element = sceneElements.secondFloor[i];
+        if(element && element.type) {
+            if(element.type === 'HIGH_END_RESIDENTIAL') {
                 x++;
             }
-            else if (child.userData.type === 'AFFORDABLE') {
+            else if (element.type === 'AFFORDABLE') {
                 y++;
             }
         }
     }
 
+    return { x: x, y: y };
+}
+
+MIT.getResidentialValue = function() {
+    var data = MIT._getResidentialCount();
+    var x = data.x;
+    var y = data.y;
+
     return 300000*x + 175000*y + 90000*x*Math.pow(y, (2/3)) - 10000*y*y;
 };
 
+MIT.getExternalResidentialValue = function() {
+    var data = MIT._getResidentialCount();
+    var x = data.x;
+    var y = data.y;
+
+    return 350000*y - 10000*y*y;
+};
+
 MIT.getCommercialValue = function() {
-    var typeCount = {};
     var sum = 0;
-    for (var i = 0; i < scene.children.length; i++) {
-        var child = scene.children[i];
-        if(child.userData && child.userData.type && child.commercial) {
-            if(typeCount[child.userData.type]) {
-                typeCount[child.userData.type] += child.multiplier;
-            }
-            else {
-                typeCount[child.userData.type] = child.multiplier;
-            }
-        }
-    }
+    var typeCount = MIT._getTypeCount();
 
     for(key in typeCount) {
         // find value from objectType object
@@ -141,22 +166,46 @@ MIT.getCommercialValue = function() {
     }
 
     return sum*1000;
+}
 
+MIT.getExternalCommercialValue = function() {
+    var sum = 0;
+    var typeCount = MIT._getTypeCount();
+
+    for(key in typeCount) {
+        // find value from objectType object
+        // goes something like this: MIT.objectType['COMMUNITY'][2]['TVE'] => 2500
+        sum += MIT.objectType[key][typeCount[key]]['TVE'];
+    }
+
+    return sum*1000;
 }
 
 MIT.updateValue = function(){
     var optimalValue = {
         residential: 2967197,
         commercial: 2250000,
-        total: 5217197
+        total: 5217197,
+        external: 16452197
     };
 
     var residentialValue = MIT.getResidentialValue();
     var commercialValue = MIT.getCommercialValue();
+    var socialValue = MIT.getExternalCommercialValue() + MIT.getExternalResidentialValue() + residentialValue + commercialValue;
 
-    $("#residentialValue").text(residentialValue.toFixed());
+    // update floating text
+    // scene.children[scene.children.length-1].geometry = new THREE.TextGeometry('$' + numeral(residentialValue + commercialValue).format('0,0'), textSettings);
+
+    $("#residentialValue").text(numeral(residentialValue).format('0,0'));
     $("#residentialPercent").children().css('width', (Math.round((residentialValue/optimalValue.residential)*100) + '%'));
 
-    $("#commercialValue").text(commercialValue.toFixed());
+    $("#commercialValue").text(numeral(commercialValue).format('0,0'));
     $("#commercialPercent").children().css('width', (Math.round((commercialValue/optimalValue.commercial)*100) + '%'));
+
+    $("#socialValue").text(numeral(socialValue).format('0,0'));
+    $("#socialPercent").children().css('width', (Math.round((socialValue/optimalValue.external)*100) + '%'));
+
+    if(MIT.currentExercise == 2 && residentialValue/optimalValue.residential > 0.99) {
+        $('#content, #secondExercise').fadeIn();
+    }
 }

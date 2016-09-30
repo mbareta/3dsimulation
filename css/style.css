@@ -34,13 +34,15 @@ a {
   padding: 1em;
   background-color: black;
   color: white;
+  z-index: 10;
 }
 
 #valueBoard {
   left: 20px;
   bottom: 20px;
   width: 350px;
-  height: 250px;
+  height: 280px;
+  display: none;
 }
 
 .value-span {

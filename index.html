@@ -5,11 +5,64 @@
     <title>MIT 3D prototype</title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link rel="stylesheet" type="text/css" href="css/progress.css" />
+    <link rel="stylesheet" type="text/css" href="css/content.css" />
+    <link href="https://fonts.googleapis.com/css?family=Lora|Roboto" rel="stylesheet">
   </head>
   <body>
     <div id="webgl"></div>
+
+    <div id="content">
+      <div id="splash">
+        <u>ACTIVITY</u>
+        <h4>Mixed Use and Neighborhood Externalities</h4>
+        <button id="splashBegin">BEGIN</button>
+      </div>
+      <div id="firstExercise">
+        <h1>
+          Instructions: Assignment #1
+        </h1>
+        <p>
+          The goal is to maximize the value of the residential part of the building (second floor).
+          Click and drag to rotate the view.
+        </p>
+        <button id="firstExerciseBegin">START</button>
+      </div>
+      <div id="secondExercise">
+        <h1>
+          Instructions: Assignment #2
+        </h1>
+        <p>
+          The goal is to maximize the value of the commercial part of the building (first floor).
+        </p>
+        <button id="secondExerciseBegin">CONTINUE</button>
+      </div>
+      <div id="thirdExercise">
+        <h1>
+          Instructions: Assignment #3
+        </h1>
+        <p>
+          The goal is to maximize the value of the whole neighborhood.
+        </p>
+        <button id="thirdExerciseBegin">CONTINUE</button>
+      </div>
+      <div id="conclusion">
+        <h1>
+          Conclusion
+        </h1>
+        <p>
+          Congrats!
+        </p>
+        <button id="conclusionBegin">FINISH</button>
+      </div>
+    </div>
+
     <div id="container">
       <div id="valueBoard">
+        <div>
+          <button id="undo">UNDO</button>
+          <button id="redo">REDO</button>
+        </div>
+        <hr>
         <span>
             RESIDENTIAL VALUE ($)
             <span id="residentialValue" class="value-span">
@@ -110,11 +163,14 @@
       </div>
     </div>
     <script src="js/jquery-1.7.2.min.js"></script>
-    <script src="js/jquery.balloon.js"></script>
-    <script src="js/three.min.js"></script>
+    <script src="js/numeral.min.js"></script>
+    <script src="js/three.js"></script>
     <script src="js/Detector.js"></script>
     <script src="js/OrbitControls.example.js"></script>
-    <script src="js/stats.min.js"></script>
+
+    <script src="js/stateBuffer.js"></script>
+
+    <script src="js/sceneModel.js"></script>
     <script src="js/calc.js"></script>
     <script src="js/clickEvents.js"></script>
     <script src="js/earth.js"></script>

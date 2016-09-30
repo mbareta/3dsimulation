@@ -1,39 +1,73 @@
+// content buttons
+$('#splashBegin').on('click', function() {
+    $('#splash').fadeOut();
+    $('#firstExercise').fadeIn();
+    MIT.currentExercise++;
+});
+
+$('#firstExerciseBegin').on('click', function() {
+    $('#firstExercise, #content').fadeOut();
+    $('#valueBoard').slideDown();
+    setTimeout(function(){controls.autoRotate = false}, 1000);
+    MIT.currentExercise++;
+})
+
+$('#secondExerciseBegin').on('click', function() {
+    $('#secondExercise, #content').fadeOut();
+    MIT.currentExercise++;
+});
+
+// three js and exercise stuff
 $(".blockMenuCommercialItem").click(function() {
     $("#blockMenuCommercial").slideUp();
-    if(editObject){
-        editObject.userData.type = $(this).data("type");
-        editObject.material.color.setHex(hexc($(this).data("color")));
-        MIT.updateValue();
-        editObject = undefined;
-    }
+    assignObject(this);
 });
 
 $(".blockMenuResidentialItem").click(function() {
     $("#blockMenuResidential").slideUp();
-    if(editObject){
-        editObject.userData.type = $(this).data("type");
-        editObject.material.color.setHex(hexc($(this).data("color")));
-        MIT.updateValue();
-        editObject = undefined;
-    }
+    assignObject(this);
 });
 
+$('#undo').on('click', function(){
+    updateScene(StateBuffer.undo());
+    MIT.updateValue();
+});
+
+$('#redo').on('click', function(){
+    updateScene(StateBuffer.redo());
+    MIT.updateValue();
+});
+
+function assignObject(that) {
+    if(editObject){
+        var type = $(that).data("type");
+        var material = materialTypes[type];
+
+        var elementData = getElement(editObject.mitId);
+        elementData.type = type;
+        elementData.options.material = material;
+
+        rebuildElement(elementData);
+        editObject = undefined;
+
+        StateBuffer.storeState(sceneElements);
+        MIT.updateValue();
+    }
+}
+
+// closes the assign popup if opened and reverts the object to previous state
 function onDocumentClick( event ) {
     event.preventDefault();
-    if(controls.autoRotate) {
-        controls.autoRotate = false;
-    }
     $("#blockMenuCommercial, #blockMenuResidential").slideUp();
     if(editObject) {
-        var blockTex = new THREE.TextureLoader().load('images/cubemap.png');
-        blockTex.wrapS = THREE.RepeatWrapping;
-        blockTex.wrapT = THREE.RepeatWrapping;
-        var blockMat = new THREE.MeshLambertMaterial({map: blockTex});
-        editObject.material = blockMat;
+        var elementData = getElement(editObject.mitId);
+        editObject.material = materialTypes[elementData.type || 'DEFAULT'];
         editObject = undefined;
     }
 }
 
+
+// returns the object you double clicked
 function onDocumentDoubleClick(event) {
     event.preventDefault();
 
@@ -50,26 +84,16 @@ function onDocumentDoubleClick(event) {
 
     if ( intersects.length > 0 ) {
         var block = intersects[0].object;
-        if (block.type) {
+        if (block.mitId) {
             var selector = '#blockMenu' + capitalizeFirstLetter(block.type);
             $(selector).css({top: event.clientY, left: event.clientX}).fadeIn();
-            block.material.color.setHex(0x555555);
+            block.material = materialTypes['SELECTED'];
             editObject = block;
         }
     }
 }
 
-function hexc(colorval) {
-    var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-    delete(parts[0]);
-    for (var i = 1; i <= 3; ++i) {
-        parts[i] = parseInt(parts[i]).toString(16);
-        if (parts[i].length == 1) parts[i] = '0' + parts[i];
-    }
-
-    return '0x' + parts.join('');
-}
-
+// helper function
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
