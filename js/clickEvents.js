@@ -83,12 +83,18 @@ function onDocumentDoubleClick(event) {
     var intersects = raycaster.intersectObjects(scene.children);
 
     if ( intersects.length > 0 ) {
+        console.log(MIT.currentExercise);
         var block = intersects[0].object;
         if (block.mitId) {
-            var selector = '#blockMenu' + capitalizeFirstLetter(block.type);
-            $(selector).css({top: event.clientY, left: event.clientX}).fadeIn();
-            block.material = materialTypes['SELECTED'];
-            editObject = block;
+            var element = getElement(block.mitId);
+            if(element &&
+                (element.options.type === 'residential' || (element.options.type === 'commercial' && MIT.currentExercise > 2))
+            ) {
+                var selector = '#blockMenu' + capitalizeFirstLetter(block.type);
+                $(selector).css({top: event.clientY, left: event.clientX}).fadeIn();
+                block.material = materialTypes['SELECTED'];
+                editObject = block;
+            }
         }
     }
 }

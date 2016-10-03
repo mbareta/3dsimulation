@@ -24,91 +24,88 @@ var materialTypes = {
 
 var sceneElements = {};
 
-sceneElements.firstFloor = [
-    {
+sceneElements.core = {
+    'firstFloor-1': {
         mitId: 'firstFloor-1',
         geometry: { l: 3, h: 5, w: 3, x: 0, y: -0.5, z: 1 },
         options: { type: 'commercial', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'firstFloor-2': {
         mitId: 'firstFloor-2',
         geometry: { l: 3, h: 5, w: 3, x: 0, y: -0.5, z: -2 },
         options: { type: 'commercial', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'firstFloor-3': {
         mitId: 'firstFloor-3',
         geometry: { l: 3, h: 5, w: 3, x: 0, y: -0.5, z: -5 },
         options: { type: 'commercial', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'firstFloor-4': {
         mitId: 'firstFloor-4',
         geometry: { l: 3, h: 5, w: 3, x: -12, y: -0.5, z: 1 },
         options: { type: 'commercial', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'firstFloor-5': {
         mitId: 'firstFloor-5',
         geometry: { l: 3, h: 5, w: 3, x: -12, y: -0.5, z: -2 },
         options: { type: 'commercial', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'firstFloor-6': {
         mitId: 'firstFloor-6',
         geometry: { l: 3, h: 5, w: 3, x: -12, y: -0.5, z: -5 },
         options: { type: 'commercial', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'firstFloor-7': {
         mitId: 'firstFloor-7',
         geometry: { l: 15, h: 5, w: 3, x: -6, y: -0.5, z: 4 },
         options: { type: 'commercial', multiplier: 3, material: 'DEFAULT' }
     },
-    {
+    'firstFloor-8': {
         mitId: 'firstFloor-8',
         geometry: { l: 15, h: 5, w: 3, x: -6, y: -0.5, z: -8 },
         options: { type: 'commercial', multiplier: 3, material: 'DEFAULT' }
-    }
-];
-
-sceneElements.secondFloor = [
-    {
+    },
+    'secondFloor-1': {
         mitId: 'secondFloor-1',
         geometry: { l: 3, h: 4, w: 6, x: 0, y: 4.25, z: -0.5 },
         options: { type: 'residential', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'secondFloor-2': {
         mitId: 'secondFloor-2',
         geometry: { l: 3, h: 4, w: 6, x: 0, y: 4.25, z: -6.5 },
         options: { type: 'residential', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'secondFloor-3': {
         mitId: 'secondFloor-3',
         geometry: { l: 3, h: 4, w: 6, x: -12, y: 4.25, z: 2.5 },
         options: { type: 'residential', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'secondFloor-4': {
         mitId: 'secondFloor-4',
         geometry: { l: 3, h: 4, w: 6, x: -12, y: 4.25, z: -3.5 },
         options: { type: 'residential', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'secondFloor-5': {
         mitId: 'secondFloor-5',
         geometry: { l: 6, h: 4, w: 3, x: -1.5, y: 4.25, z: 4 },
         options: { type: 'residential', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'secondFloor-6': {
         mitId: 'secondFloor-6',
         geometry: { l: 6, h: 4, w: 3, x: -7.5, y: 4.25, z: 4 },
         options: { type: 'residential', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'secondFloor-7': {
         mitId: 'secondFloor-7',
         geometry: { l: 6, h: 4, w: 3, x: -4.5, y: 4.25, z: -8 },
         options: { type: 'residential', multiplier: 1, material: 'DEFAULT' }
     },
-    {
+    'secondFloor-8': {
         mitId: 'secondFloor-8',
         geometry: { l: 6, h: 4, w: 3, x: -10.5, y: 4.25, z: -8 },
         options: { type: 'residential', multiplier: 1, material: 'DEFAULT' }
     }
-];
+};
 
 sceneElements.neighbors = [
     {
@@ -164,14 +161,11 @@ function buildScene() {
             scene.children.splice(a, 1);
         }
     }
-    for (var i = 0; i < sceneElements.firstFloor.length; i++) {
-        var element = sceneElements.firstFloor[i];
+    for(var mitId in sceneElements.core) {
+        var element = sceneElements.core[mitId];
         addBlock(element);
     }
-    for (var j = 0; j < sceneElements.secondFloor.length; j++) {
-        var element = sceneElements.secondFloor[j];
-        addBlock(element);
-    }
+
     for (var k = 0; k < sceneElements.neighbors.length; k++) {
         var element = sceneElements.neighbors[k];
         addBlock(element);
@@ -181,18 +175,15 @@ function buildScene() {
 function updateScene(newModel) {
     if(!newModel) return;
 
-    var centralElements = sceneElements.secondFloor.concat(sceneElements.firstFloor);
-    var newCentralElements = newModel.secondFloor.concat(newModel.firstFloor);
+    var coreElements = sceneElements.core;
+    var newCoreElements = newModel.core;
 
-    for (var j = 0; j < centralElements.length; j++) {
-        var element = centralElements[j];
-        var elementJson = JSON.stringify(element);
+    for(var newElementId in newCoreElements) {
+        var newElement = newCoreElements[newElementId];
+        var oldElement = coreElements[newElementId]; // old el ID and new el ID will be the same
 
-        for (var i = 0; i < newCentralElements.length; i++) {
-            var newElement = newCentralElements[i];
-            if(element.mitId == newElement.mitId && elementJson != JSON.stringify(newElement)) {
-                rebuildElement(newElement);
-            }
+        if(JSON.stringify(newElement) != JSON.stringify(oldElement)) {
+            rebuildElement(newElement);
         }
     }
 
@@ -201,13 +192,7 @@ function updateScene(newModel) {
 }
 
 function getElement(mitId) {
-    var array = sceneElements.firstFloor.concat(sceneElements.secondFloor);
-    for (var i = 0; i < array.length; i++) {
-        var item = array[i];
-        if(item.mitId === mitId) {
-            return item;
-        }
-    }
+    return sceneElements.core[mitId];
 }
 
 function rebuildElement(elementData) {
@@ -238,8 +223,9 @@ function addBlock(data) {
 
     scene.add(block);
 
-    if(options.type === 'neighboring')
+    if(options.type === 'neighboring') {
         addBlockText(data);
+    }
 }
 
 function addBlockText(data) {

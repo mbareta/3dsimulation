@@ -106,9 +106,9 @@ MIT.objectType = {
 MIT._getTypeCount = function() {
     var typeCount = {};
 
-    for (var i = 0; i < sceneElements.firstFloor.length; i++) {
-        var element = sceneElements.firstFloor[i];
-        if(element && element.type) {
+    for(var mitId in sceneElements.core) {
+        var element = sceneElements.core[mitId];
+        if(element && element.options.type === 'commercial' && element.type) {
             if(typeCount[element.type]) {
                 typeCount[element.type] += element.options.multiplier;
             }
@@ -124,9 +124,9 @@ MIT._getTypeCount = function() {
 MIT._getResidentialCount = function() {
     var x = y = 0;
 
-    for (var i = 0; i < sceneElements.secondFloor.length; i++) {
-        var element = sceneElements.secondFloor[i];
-        if(element && element.type) {
+    for(var mitId in sceneElements.core) {
+        var element = sceneElements.core[mitId];
+        if(element && element.options.type === 'residential' && element.type) {
             if(element.type === 'HIGH_END_RESIDENTIAL') {
                 x++;
             }

@@ -35,7 +35,7 @@ $(function () {
 
     var scene = new THREE.Scene();
 
-    scene.add(createSky(radius, segments));
+    // scene.add(createSky(radius, segments));
     scene.add(createGround());
 
     var hemLight = new THREE.HemisphereLight(0xeeffee, 0x665555, 1);
