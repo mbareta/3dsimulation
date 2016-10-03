@@ -9,6 +9,7 @@ var materialTypes = {
     DEFAULT: new THREE.MeshLambertMaterial({map: blockTexture}),
     NEIGHBOR: new THREE.MeshLambertMaterial({color: 0x552B2B}),
     SELECTED: new THREE.MeshLambertMaterial({color: 0x555555}),
+    FONT: new THREE.MeshPhongMaterial({color: 0xffffff}),
 
     HIGH_END_RESIDENTIAL: new THREE.MeshLambertMaterial({color: 'rgb(155, 69, 33)'}),
     AFFORDABLE: new THREE.MeshLambertMaterial({color: 'rgb(191, 144, 0)'}),
@@ -236,4 +237,31 @@ function addBlock(data) {
     block.type = options.type;
 
     scene.add(block);
+
+    if(options.type === 'neighboring')
+        addBlockText(data);
+}
+
+function addBlockText(data) {
+    if(textSettings.font) {
+        var textGeometry = new THREE.TextGeometry(data.mitId, textSettings);
+        textGeometry.center();
+
+        textBlock = new THREE.Mesh(textGeometry, materialTypes['FONT'])
+        textBlock.position.x = data.geometry.x;
+        textBlock.position.z = data.geometry.z;
+        textBlock.position.y = 7;
+        textBlock.type = 'text';
+
+        scene.add(textBlock);
+    }
+}
+
+function textLookAtCamera() {
+    for (var i = 0; i < scene.children.length; i++) {
+        var child = scene.children[i];
+        if(child.type === 'text') {
+            child.lookAt({ x: camera.position.x, y: 15, z: camera.position.z });
+        }
+    }
 }

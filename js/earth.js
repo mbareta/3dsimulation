@@ -6,11 +6,9 @@ var mouse = new THREE.Vector2();
 var renderer = new THREE.WebGLRenderer();
 var camera = new THREE.PerspectiveCamera(30, width / height, 1, 1000);
 var editObject;
-
-var textBlock;
 var textSettings = {
-    size: 2,
-    height: 1,
+    size: 1,
+    height: 0.1,
     curveSegments: 16,
     font: undefined
 };
@@ -52,25 +50,18 @@ $(function () {
     document.addEventListener( 'click', onDocumentClick, false );
     window.addEventListener( 'resize', onWindowResize, false );
 
+    webglEl.appendChild(renderer.domElement);
+    window.scene = scene;
+
+
     // load font and draw text
     var loader = new THREE.FontLoader();
     loader.load( '../optimer_regular.typeface.json', function (font) {
         textSettings.font = font;
-        var textMaterial = new THREE.MeshLambertMaterial({color: 0xaaaaaa});
-        var textGeometry = new THREE.TextGeometry('hello panama', textSettings);
 
-        textBlock = new THREE.Mesh(textGeometry,textMaterial)
-        textBlock.position.x = -4;
-        textBlock.position.y = 10;
-
-        scene.add(textBlock);
+        // build scene after the font is loaded
+        buildScene();
     });
-
-
-    webglEl.appendChild(renderer.domElement);
-    window.scene = scene;
-
-    buildScene();
 
     render();
 
@@ -78,9 +69,9 @@ $(function () {
 
     // define functions below
     function render() {
-        if(textBlock)textBlock.lookAt({ x: camera.position.x, y: 15, z: camera.position.z });
         controls.update();
         requestAnimationFrame(render);
+        textLookAtCamera();
         renderer.render(scene, camera);
     }
 
