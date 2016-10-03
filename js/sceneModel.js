@@ -107,48 +107,48 @@ sceneElements.core = {
     }
 };
 
-sceneElements.neighbors = [
-    {
+sceneElements.neighbors = {
+    'neighbors-1': {
         mitId: 'neighbors-1',
         geometry: { l: 15, h: 8, w: 10, x: -13, y: 0, z: 22 },
-        options: { type: 'neighboring', multiplier: 1, material: 'NEIGHBOR' }
+        options: { type: 'neighboring', multiplier: 0.11, material: 'NEIGHBOR', initialValue: 1200000 }
     },
-    {
+    'neighbors-2': {
         mitId: 'neighbors-2',
         geometry: { l: 10, h: 8, w: 10, x: 12, y: 0, z: 25 },
-        options: { type: 'neighboring', multiplier: 1, material: 'NEIGHBOR' }
+        options: { type: 'neighboring', multiplier: 0.19, material: 'NEIGHBOR', initialValue: 2000000 }
     },
-    {
+    'neighbors-3': {
         mitId: 'neighbors-3',
         geometry: { l: 10, h: 8, w: 20, x: 15, y: 0, z: 5 },
-        options: { type: 'neighboring', multiplier: 1, material: 'NEIGHBOR' }
+        options: { type: 'neighboring', multiplier: 0.07, material: 'NEIGHBOR', initialValue: 750000 }
     },
-    {
+    'neighbors-4': {
         mitId: 'neighbors-4',
         geometry: { l: 10, h: 8, w: 10, x: 20, y: 0, z: -22 },
-        options: { type: 'neighboring', multiplier: 1, material: 'NEIGHBOR' }
+        options: { type: 'neighboring', multiplier: 0.17, material: 'NEIGHBOR', initialValue: 1750000 }
     },
-    {
+    'neighbors-5': {
         mitId: 'neighbors-5',
         geometry: { l: 25, h: 8, w: 10, x: -5, y: 0, z: -23 },
-        options: { type: 'neighboring', multiplier: 1, material: 'NEIGHBOR' }
+        options: { type: 'neighboring', multiplier: 0.08, material: 'NEIGHBOR', initialValue: 800000 }
     },
-    {
+    'neighbors-6': {
         mitId: 'neighbors-6',
         geometry: { l: 10, h: 8, w: 10, x: -27, y: 0, z: -17 },
-        options: { type: 'neighboring', multiplier: 1, material: 'NEIGHBOR' }
+        options: { type: 'neighboring', multiplier: 0.08, material: 'NEIGHBOR', initialValue: 850000 }
     },
-    {
+    'neighbors-7': {
         mitId: 'neighbors-7',
         geometry: { l: 10, h: 8, w: 15, x: -28, y: 0, z: 5.5 },
-        options: { type: 'neighboring', multiplier: 1, material: 'NEIGHBOR' }
+        options: { type: 'neighboring', multiplier: 0.15, material: 'NEIGHBOR', initialValue: 1600000 }
     },
-    {
+    'neighbors-8': {
         mitId: 'neighbors-8',
         geometry: { l: 10, h: 8, w: 10, x: -30, y: 0, z: 22 },
-        options: { type: 'neighboring', multiplier: 1, material: 'NEIGHBOR' }
+        options: { type: 'neighboring', multiplier: 0.14, material: 'NEIGHBOR', initialValue: 1500000 }
     }
-];
+};
 
 StateBuffer.init(sceneElements);
 
@@ -161,13 +161,14 @@ function buildScene() {
             scene.children.splice(a, 1);
         }
     }
+
     for(var mitId in sceneElements.core) {
         var element = sceneElements.core[mitId];
         addBlock(element);
     }
 
-    for (var k = 0; k < sceneElements.neighbors.length; k++) {
-        var element = sceneElements.neighbors[k];
+    for(var mitId in sceneElements.neighbors) {
+        var element = sceneElements.neighbors[mitId];
         addBlock(element);
     }
 }
@@ -230,13 +231,16 @@ function addBlock(data) {
 
 function addBlockText(data) {
     if(textSettings.font) {
-        var textGeometry = new THREE.TextGeometry(data.mitId, textSettings);
+        var text = '$' + numeral(data.options.initialValue).format('0,0');
+        var textGeometry = new THREE.TextGeometry(text, textSettings);
         textGeometry.center();
 
         textBlock = new THREE.Mesh(textGeometry, materialTypes['FONT'])
         textBlock.position.x = data.geometry.x;
         textBlock.position.z = data.geometry.z;
         textBlock.position.y = 7;
+
+        textBlock.mitId = 'text-' + data.mitId;
         textBlock.type = 'text';
 
         scene.add(textBlock);

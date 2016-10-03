@@ -38,6 +38,15 @@ $('#redo').on('click', function(){
     MIT.updateValue();
 });
 
+$('#rotateLeft').on('click', function(){
+    controls.rotateLeft(90);
+});
+
+$('#rotateRight').on('click', function(){
+    controls.rotateRight(90);
+});
+
+
 function assignObject(that) {
     if(editObject){
         var type = $(that).data("type");

@@ -152,7 +152,7 @@ MIT.getExternalResidentialValue = function() {
     var x = data.x;
     var y = data.y;
 
-    return 350000*y - 10000*y*y;
+    return 300000*x + 175000*y + 90000*x*Math.pow(y, (2/3)) - 10000*y*y + 350000*y - 10000*y*y;
 };
 
 MIT.getCommercialValue = function() {
@@ -186,15 +186,15 @@ MIT.updateValue = function(){
         residential: 2967197,
         commercial: 2250000,
         total: 5217197,
-        external: 16452197
+        neighborhood: 16452197
     };
 
     var residentialValue = MIT.getResidentialValue();
     var commercialValue = MIT.getCommercialValue();
-    var socialValue = MIT.getExternalCommercialValue() + MIT.getExternalResidentialValue() + residentialValue + commercialValue;
+    var neighborhoodValue = MIT.getExternalCommercialValue() + MIT.getExternalResidentialValue() + residentialValue + commercialValue;
 
     // update floating text
-    // scene.children[scene.children.length-1].geometry = new THREE.TextGeometry('$' + numeral(residentialValue + commercialValue).format('0,0'), textSettings);
+    MIT.updateFloatingText(neighborhoodValue - residentialValue - commercialValue);
 
     $("#residentialValue").text(numeral(residentialValue).format('0,0'));
     $("#residentialPercent").children().css('width', (Math.round((residentialValue/optimalValue.residential)*100) + '%'));
@@ -202,10 +202,27 @@ MIT.updateValue = function(){
     $("#commercialValue").text(numeral(commercialValue).format('0,0'));
     $("#commercialPercent").children().css('width', (Math.round((commercialValue/optimalValue.commercial)*100) + '%'));
 
-    $("#socialValue").text(numeral(socialValue).format('0,0'));
-    $("#socialPercent").children().css('width', (Math.round((socialValue/optimalValue.external)*100) + '%'));
+    $("#socialValue").text(numeral(neighborhoodValue).format('0,0'));
+    $("#socialPercent").children().css('width', (Math.round((neighborhoodValue/optimalValue.neighborhood)*100) + '%'));
 
     if(MIT.currentExercise == 2 && residentialValue/optimalValue.residential > 0.99) {
         $('#content, #secondExercise').fadeIn();
+    }
+}
+
+MIT.updateFloatingText = function(value) {
+    for (var i = 0; i < scene.children.length; i++) {
+        var child = scene.children[i];
+        // find all scene text objects
+        if(child.type === 'text') {
+            var elementId = child.mitId.slice(5, child.mitId.length);
+            var neighbor = sceneElements.neighbors[elementId];
+
+            var text = '$' + numeral(neighbor.options.initialValue + Math.round(value*neighbor.options.multiplier)).format('0,0');
+            var textGeometry = new THREE.TextGeometry(text, textSettings);
+            textGeometry.center();
+
+            child.geometry = textGeometry;
+        }
     }
 }
