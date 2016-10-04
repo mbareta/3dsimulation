@@ -8,7 +8,7 @@ var camera = new THREE.PerspectiveCamera(30, width / height, 1, 1000);
 var editObject;
 var textSettings = {
     size: 1,
-    height: 0.1,
+    height: 0.4,
     curveSegments: 16,
     font: undefined
 };

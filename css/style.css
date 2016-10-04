@@ -9,6 +9,10 @@ a {
   cursor: pointer;
 }
 
+span, button, a {
+  font-family: Roboto;
+}
+
 button {
   background: transparent;
   border: 1px solid white;
@@ -65,15 +69,16 @@ button:hover {
 
 #blockMenuResidential, #blockMenuCommercial {
   display: none;
-  width: 370px;
-  height: 220px;
-  border: 1px solid white;
+  top: 30px;
+  right: 30px;
+  width: 330px;
+  height: 260px;
   color: white;
   background-color: black;
 }
 
 #blockMenuResidential {
-  height: 70px;
+  height: 90px;
 }
 
 #selectTypeTitle {
@@ -85,40 +90,49 @@ button:hover {
 }
 
 .menu-label {
-  margin-left: 15px;
-}
-
-.square {
-  height: 15px;
-  width: 15px;
   display: inline-block;
-  border: 1px solid white;
+  width: 100%;
+  margin-bottom: 2px;
+  padding: 6px 0px;
+  text-transform: uppercase;
+  box-sizing: border-box;
+  border-radius: 1px;
+  font-family: Roboto;
 }
 
-.square.blue {
+.menu-label a {
+  padding-left: .6em;
+}
+
+.menu-label:hover {
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+}
+
+.menu-label.blue {
   background-color: rgba(65, 138, 132, 1);
 }
 
-.square.orange {
+.menu-label.orange {
   background-color: rgba(155, 69, 33, 1);
 }
 
-.square.yellow {
+.menu-label.yellow {
   background-color: rgba(191, 144, 0, 1);
 }
 
-.square.skin {
+.menu-label.skin {
   background-color: rgba(191, 158, 116, 1);
 }
 
-.square.brown {
+.menu-label.brown {
   background-color: rgba(81, 50, 49, 1);
 }
 
-.square.red {
+.menu-label.red {
   background-color: rgba(110, 27, 24, 1);
 }
 
-.square.green {
+.menu-label.green {
   background-color: rgba(105, 120, 61, 1);
 }

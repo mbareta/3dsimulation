@@ -9,7 +9,7 @@ var materialTypes = {
     DEFAULT: new THREE.MeshLambertMaterial({map: blockTexture}),
     NEIGHBOR: new THREE.MeshLambertMaterial({color: 0x552B2B}),
     SELECTED: new THREE.MeshLambertMaterial({color: 0x555555}),
-    FONT: new THREE.MeshPhongMaterial({color: 0xffffff}),
+    FONT: new THREE.MeshPhongMaterial({color: 0xbbbbbb, shininess: 50, emissive: 0x222222}),
 
     HIGH_END_RESIDENTIAL: new THREE.MeshLambertMaterial({color: 'rgb(155, 69, 33)'}),
     AFFORDABLE: new THREE.MeshLambertMaterial({color: 'rgb(191, 144, 0)'}),
@@ -166,7 +166,6 @@ function buildScene() {
         var element = sceneElements.core[mitId];
         addBlock(element);
     }
-
     for(var mitId in sceneElements.neighbors) {
         var element = sceneElements.neighbors[mitId];
         addBlock(element);
@@ -224,7 +223,8 @@ function addBlock(data) {
 
     scene.add(block);
 
-    if(options.type === 'neighboring') {
+    // show neighboring property value only on last exercise
+    if(MIT.currentExercise > 3 && options.type === 'neighboring') {
         addBlockText(data);
     }
 }

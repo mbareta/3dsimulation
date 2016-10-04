@@ -17,6 +17,12 @@ $('#secondExerciseBegin').on('click', function() {
     MIT.currentExercise++;
 });
 
+$('#thirdExerciseBegin').on('click', function() {
+    $('#thirdExercise, #content').fadeOut();
+    MIT.currentExercise++;
+    buildScene();
+});
+
 // three js and exercise stuff
 $(".blockMenuCommercialItem").click(function() {
     $("#blockMenuCommercial").slideUp();
@@ -100,7 +106,7 @@ function onDocumentDoubleClick(event) {
                 (element.options.type === 'residential' || (element.options.type === 'commercial' && MIT.currentExercise > 2))
             ) {
                 var selector = '#blockMenu' + capitalizeFirstLetter(block.type);
-                $(selector).css({top: event.clientY, left: event.clientX}).fadeIn();
+                $(selector).fadeIn();
                 block.material = materialTypes['SELECTED'];
                 editObject = block;
             }

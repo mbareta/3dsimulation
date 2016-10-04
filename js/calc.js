@@ -1,5 +1,9 @@
 var MIT = {};
+
+// index of current exercise
+// should re-factor this to object instead of integer for human readability and robustness
 MIT.currentExercise = 0;
+
 // types of objects
 MIT.objectType = {
     CONVENIENCE: {
@@ -136,6 +140,13 @@ MIT._getResidentialCount = function() {
         }
     }
 
+    if(x === 8) {
+        $('#valueBoard').attr('data-tooltip', 'Your development is isolated from the neighborhood and receives hostility from some, lack of known locals attracts crime.');
+    }
+    else {
+        $('#valueBoard').removeAttr('data-tooltip');
+    }
+
     return { x: x, y: y };
 }
 
@@ -196,6 +207,7 @@ MIT.updateValue = function(){
     // update floating text
     MIT.updateFloatingText(neighborhoodValue - residentialValue - commercialValue);
 
+    // update view
     $("#residentialValue").text(numeral(residentialValue).format('0,0'));
     $("#residentialPercent").children().css('width', (Math.round((residentialValue/optimalValue.residential)*100) + '%'));
 
@@ -205,8 +217,14 @@ MIT.updateValue = function(){
     $("#socialValue").text(numeral(neighborhoodValue).format('0,0'));
     $("#socialPercent").children().css('width', (Math.round((neighborhoodValue/optimalValue.neighborhood)*100) + '%'));
 
+    // finish first exercise
     if(MIT.currentExercise == 2 && residentialValue/optimalValue.residential > 0.99) {
-        $('#content, #secondExercise').fadeIn();
+        $('#content, #secondExercise').fadeIn(1200);
+    }
+
+    // finish second exercise
+    if(MIT.currentExercise == 3 && commercialValue/optimalValue.commercial > 0.8) {
+        $('#content, #thirdExercise').fadeIn(1200);
     }
 }
 
