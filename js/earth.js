@@ -3,8 +3,8 @@ var height = window.innerHeight;
 
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
-var renderer = new THREE.WebGLRenderer();
-var camera = new THREE.PerspectiveCamera(30, width / height, 1, 1000);
+var renderer = new THREE.WebGLRenderer({ antialias: true });
+var camera = new THREE.PerspectiveCamera(50, width / height, 1, 500);
 var editObject;
 var textSettings = {
     size: 1,
@@ -24,9 +24,7 @@ $(function () {
     var radius = 90;
     var segments = 32;
 
-    camera.position.x = -30;
-    camera.position.y = 30;
-    camera.position.z = -30;
+    camera.position.set(40, 0, 40);
 
     renderer.setSize(width, height);
 
@@ -65,6 +63,11 @@ $(function () {
 
     render();
 
+    setTimeout(
+        function(){$('#splashBegin').css('visibility', 'initial');},
+        1000
+    );
+
     // end init
 
     // define functions below
@@ -76,30 +79,21 @@ $(function () {
     }
 
     function createGround() {
-        var texture = new THREE.TextureLoader().load('images/floor.jpg');
+        var texture = new THREE.TextureLoader().load('images/floor.png');
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
 
-        var groundGeo = new THREE.PlaneGeometry(100, 100, segments, segments);
+        var groundGeo = new THREE.PlaneGeometry(600, 600, segments, segments);
         var groundMat = new THREE.MeshPhongMaterial({ map:texture });
 
         var ground = new THREE.Mesh(groundGeo,groundMat);
+        ground.position.z = -3;
         ground.position.y = -3;
+
         ground.rotation.x = -Math.PI/2;
-        ground.doubleSided = true;
         ground.receiveShadow = true;
 
         return ground;
-    }
-
-    function createSky(radius, segments) {
-        return new THREE.Mesh(
-            new THREE.SphereGeometry(radius, segments, segments),
-            new THREE.MeshBasicMaterial({
-                map: new THREE.TextureLoader().load('images/skybox1.png'),
-                side: THREE.BackSide
-            })
-        );
     }
 
     function createDirLight() {
@@ -118,6 +112,13 @@ $(function () {
         dirLight.shadow.camera.top = d;
 
         dirLight.shadow.camera.far = 1000;
+
+        dirLight.shadowCameraFov = 45;
+        dirLight.shadowBias = 0.0001;
+        dirLight.shadowDarkness = 0.6;
+        dirLight.shadowMapWidth = 2048;
+        dirLight.shadowMapHeight = 2048;
+
 
         return dirLight;
     }
